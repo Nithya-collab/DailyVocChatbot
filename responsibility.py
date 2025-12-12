@@ -14,10 +14,10 @@ load_dotenv()
 # ------------------ CONFIG ------------------
 TOKEN = os.getenv("DISCORD_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
-VOCAB_API_URL = os.getenv("VOCAB_API_URL")   # Can be empty
+VOCAB_API_URL = os.getenv("VOCAB_API_URL")  
 VOCAB_JSON_FILE = "vocab.json"
 TIMEZONE = pytz.timezone("Asia/Kolkata")
-# --------------------------------------------
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -36,9 +36,7 @@ if not VOCAB_API_URL:
         print("Error loading vocab.json:", e)
 
 
-# ---------------------------------------------------
-# FETCH VOCAB (5 unique)
-# ---------------------------------------------------
+
 def fetch_vocab():
     try:
         # API mode → API returns array of words
@@ -74,44 +72,36 @@ def fetch_vocab():
         return None
 
 
-# ---------------------------------------------------
-# SEND VOCAB TO DISCORD
-# ---------------------------------------------------
 def send_vocab_reminder():
     content = fetch_vocab()
     if content:
         requests.post(WEBHOOK_URL, json={"content": content})
         print("Sent today's vocabulary.")
 
-
-# ---------------------------------------------------
-# SEND “You still not learn” MESSAGE
-# ---------------------------------------------------
 def send_not_learn_warning():
     warning = "⚠️ You still not learn today's vocabulary!"
     requests.post(WEBHOOK_URL, json={"content": warning})
     print("Sent not-learn warning.")
 
 
-# ---------------------------------------------------
-# EVENTS
-# ---------------------------------------------------
 @bot.event
 async def on_ready():
     print(f"✅ Bot online as {bot.user}")
 
-    # # Daily vocab at 10:00 AM
-    # scheduler.add_job(
-    #     send_vocab_reminder,
-    #     "cron",
-    #     hour=10,
-    #     minute=0
-    # )
+    # Daily vocab at 10:00 AM default app time
     scheduler.add_job(
-    send_vocab_reminder,
-    "date",
-    run_date=datetime.now(TIMEZONE).replace(hour=18, minute=45, second=0, microsecond=0)
-)
+        send_vocab_reminder,
+        "cron",
+        hour=10,
+        minute=0
+    )
+
+    # use below set to test with custome time
+#     scheduler.add_job(
+#     send_vocab_reminder,
+#     "date",
+#     run_date=datetime.now(TIMEZONE).replace(hour=18, minute=45, second=0, microsecond=0)
+# )
 
     print("📌 Daily vocab scheduled at 10:00 AM")
 
@@ -120,9 +110,7 @@ async def on_ready():
         print("⏳ Scheduler started.")
 
 
-# ---------------------------------------------------
-# COMMAND — !remind HH:MM
-# ---------------------------------------------------
+
 @bot.command()
 async def remind(ctx, first: str, second: str = None):
     """
@@ -165,7 +153,4 @@ async def remind(ctx, first: str, second: str = None):
         await ctx.send(f"⚠️ Error: {e}")
 
 
-# ---------------------------------------------------
-# RUN BOT
-# ---------------------------------------------------
 bot.run(TOKEN)
