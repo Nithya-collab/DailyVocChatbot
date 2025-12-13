@@ -1,1 +1,14 @@
+# Virtual environments
+.venv/
+venv/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local env file
+.env
+
+# Packaging
+deploy.zip
 .env
