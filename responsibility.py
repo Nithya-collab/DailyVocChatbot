@@ -21,6 +21,7 @@ TIMEZONE = pytz.timezone("Asia/Kolkata")
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True  # Guild Members Intent - enable in developer portal too
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 scheduler = AsyncIOScheduler(timezone=TIMEZONE)
@@ -74,14 +75,61 @@ def fetch_vocab():
 
 def send_vocab_reminder():
     content = fetch_vocab()
-    if content:
-        requests.post(WEBHOOK_URL, json={"content": content})
-        print("Sent today's vocabulary.")
+    if not content:
+        return
+
+    # Legacy single webhook support
+    if WEBHOOK_URL:
+        try:
+            requests.post(WEBHOOK_URL, json={"content": content})
+            print("Sent today's vocabulary to legacy WEBHOOK_URL.")
+        except Exception as e:
+            print("Failed legacy webhook post:", e)
+
+    # Per-guild webhooks stored in guild_config.json
+    try:
+        with open("guild_config.json", "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+    except Exception:
+        cfg = {}
+
+    for gid, data in cfg.items():
+        webhook = data.get("webhook")
+        if not webhook:
+            continue
+        try:
+            requests.post(webhook, json={"content": content})
+            print(f"Sent vocab to guild {gid} webhook.")
+        except Exception as e:
+            print(f"Failed to send vocab to guild {gid}:", e)
 
 def send_not_learn_warning():
     warning = "⚠️ You still not learn today's vocabulary!"
-    requests.post(WEBHOOK_URL, json={"content": warning})
-    print("Sent not-learn warning.")
+
+    # send to legacy webhook if present
+    if WEBHOOK_URL:
+        try:
+            requests.post(WEBHOOK_URL, json={"content": warning})
+            print("Sent not-learn warning to legacy WEBHOOK_URL.")
+        except Exception as e:
+            print("Failed legacy warning post:", e)
+
+    # send to per-guild webhooks
+    try:
+        with open("guild_config.json", "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+    except Exception:
+        cfg = {}
+
+    for gid, data in cfg.items():
+        webhook = data.get("webhook")
+        if not webhook:
+            continue
+        try:
+            requests.post(webhook, json={"content": warning})
+            print(f"Sent not-learn warning to guild {gid}.")
+        except Exception as e:
+            print(f"Failed warning for guild {gid}:", e)
 
 
 @bot.event
