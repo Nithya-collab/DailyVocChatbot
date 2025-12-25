@@ -1,0 +1,8 @@
+{
+  "name": "Nithibot: Visual Vocab Bot",
+  "description": "A daily vocabulary assistant that sends 5 visual words daily, simulates messaging integration, and understands natural language scheduling reminders.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
