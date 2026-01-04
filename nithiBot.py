@@ -3,7 +3,12 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 import pytz
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1446148137268940936/aoe-gQhfHpDzujq2G-KJo-_IkzWBPWzdODdOdduiG0NdmiEeFdMh1BQngeM4lUyri83b"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 TIMEZONE = pytz.timezone("Asia/Kolkata")
 

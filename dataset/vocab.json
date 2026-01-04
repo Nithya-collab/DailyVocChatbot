@@ -1,0 +1,642 @@
+{
+  "day1": [
+    {
+      "word": "serene",
+      "meaning_ta": "அமைதியான, சாந்தமான",
+      "sentence": "The lake looked serene in the early morning light.",
+      "image_url": "https://source.unsplash.com/featured/?calm lake"
+    },
+    {
+      "word": "eloquent",
+      "meaning_ta": "திறமையாக பேசும்",
+      "sentence": "She gave an eloquent speech at the meeting.",
+      "image_url": "https://source.unsplash.com/featured/?public speaking"
+    },
+    {
+      "word": "vivid",
+      "meaning_ta": "தெளிவான, உயிர்ப்பான",
+      "sentence": "He has vivid memories of his childhood.",
+      "image_url": "https://source.unsplash.com/featured/?colorful"
+    },
+    {
+      "word": "lucid",
+      "meaning_ta": "எளிதில் புரியக்கூடிய",
+      "sentence": "The teacher gave a lucid explanation.",
+      "image_url": "https://source.unsplash.com/featured/?clear explanation"
+    },
+    {
+      "word": "meticulous",
+      "meaning_ta": "மிகவும் கவனமான",
+      "sentence": "She is meticulous about her work.",
+      "image_url": "https://source.unsplash.com/featured/?careful work"
+    }
+  ],
+  "day2": [
+    {
+      "word": "resilient",
+      "meaning_ta": "சிரமங்களை தாங்கும் திறன் கொண்ட",
+      "sentence": "Children are often more resilient than adults.",
+      "image_url": "https://source.unsplash.com/featured/?strength"
+    },
+    {
+      "word": "pragmatic",
+      "meaning_ta": "நடைமுறை சார்ந்த",
+      "sentence": "He took a pragmatic approach to the problem.",
+      "image_url": "https://source.unsplash.com/featured/?problem solving"
+    },
+    {
+      "word": "tenacious",
+      "meaning_ta": "விடாமுயற்சி கொண்ட",
+      "sentence": "She is tenacious in achieving her goals.",
+      "image_url": "https://source.unsplash.com/featured/?determination"
+    },
+    {
+      "word": "ubiquitous",
+      "meaning_ta": "எங்கும் காணப்படும்",
+      "sentence": "Smartphones are ubiquitous today.",
+      "image_url": "https://source.unsplash.com/featured/?smartphone"
+    },
+    {
+      "word": "benevolent",
+      "meaning_ta": "அன்பும் கருணையும் கொண்ட",
+      "sentence": "The benevolent king helped the poor.",
+      "image_url": "https://source.unsplash.com/featured/?kindness"
+    }
+  ],
+  "day3": [
+    {
+      "word": "candid",
+      "meaning_ta": "தெளிவாக உண்மையாக பேசும்",
+      "sentence": "He gave a candid opinion.",
+      "image_url": "https://source.unsplash.com/featured/?honest talk"
+    },
+    {
+      "word": "diligent",
+      "meaning_ta": "அர்ப்பணிப்புடன் உழைக்கும்",
+      "sentence": "She is a diligent student.",
+      "image_url": "https://source.unsplash.com/featured/?studying"
+    },
+    {
+      "word": "eminent",
+      "meaning_ta": "புகழ்பெற்ற",
+      "sentence": "He is an eminent scientist.",
+      "image_url": "https://source.unsplash.com/featured/?scientist"
+    },
+    {
+      "word": "gregarious",
+      "meaning_ta": "சமூகமாக பழகும்",
+      "sentence": "She has a gregarious personality.",
+      "image_url": "https://source.unsplash.com/featured/?friends"
+    },
+    {
+      "word": "impeccable",
+      "meaning_ta": "குற்றமற்ற",
+      "sentence": "Her manners were impeccable.",
+      "image_url": "https://source.unsplash.com/featured/?elegance"
+    }
+  ],
+  "day4": [
+    {
+      "word": "jubilant",
+      "meaning_ta": "மிகுந்த மகிழ்ச்சியுடன்",
+      "sentence": "The crowd was jubilant after the win.",
+      "image_url": "https://source.unsplash.com/featured/?celebration"
+    },
+    {
+      "word": "loquacious",
+      "meaning_ta": "அதிகமாக பேசும்",
+      "sentence": "He is loquacious at parties.",
+      "image_url": "https://source.unsplash.com/featured/?talking"
+    },
+    {
+      "word": "magnanimous",
+      "meaning_ta": "பெருந்தன்மை கொண்ட",
+      "sentence": "She was magnanimous in victory.",
+      "image_url": "https://source.unsplash.com/featured/?generosity"
+    },
+    {
+      "word": "nostalgic",
+      "meaning_ta": "நினைவுகளை நினைத்து உருகும்",
+      "sentence": "He felt nostalgic about school days.",
+      "image_url": "https://source.unsplash.com/featured/?memories"
+    },
+    {
+      "word": "ominous",
+      "meaning_ta": "அபாயத்தை சுட்டிக்காட்டும்",
+      "sentence": "Dark clouds looked ominous.",
+      "image_url": "https://source.unsplash.com/featured/?storm clouds"
+    }
+  ],
+  "day5": [
+    {
+      "word": "pervasive",
+      "meaning_ta": "எங்கும் பரவும்",
+      "sentence": "A sense of fear was pervasive.",
+      "image_url": "https://source.unsplash.com/featured/?spread"
+    },
+    {
+      "word": "quandary",
+      "meaning_ta": "குழப்பமான நிலை",
+      "sentence": "She was in a quandary about her decision.",
+      "image_url": "https://source.unsplash.com/featured/?confusion"
+    },
+    {
+      "word": "subtle",
+      "meaning_ta": "மெல்லிய, நுண்ணிய",
+      "sentence": "There was a subtle change in his tone.",
+      "image_url": "https://source.unsplash.com/featured/?soft light"
+    },
+    {
+      "word": "tangible",
+      "meaning_ta": "தெளிவாக உணரக்கூடிய",
+      "sentence": "The tension was tangible.",
+      "image_url": "https://source.unsplash.com/featured/?touch"
+    },
+    {
+      "word": "versatile",
+      "meaning_ta": "பல்திறன் கொண்ட",
+      "sentence": "She is a versatile performer.",
+      "image_url": "https://source.unsplash.com/featured/?multiskill"
+    }
+  ],
+  "day6": [
+    {
+      "word": "whimsical",
+      "meaning_ta": "கற்பனை நிறைந்த",
+      "sentence": "The painting had a whimsical style.",
+      "image_url": "https://source.unsplash.com/featured/?fantasy art"
+    },
+    {
+      "word": "zealous",
+      "meaning_ta": "மிகுந்த உற்சாகம் கொண்ட",
+      "sentence": "He is zealous about fitness.",
+      "image_url": "https://source.unsplash.com/featured/?motivation"
+    },
+    {
+      "word": "articulate",
+      "meaning_ta": "தெளிவாக பேசும்",
+      "sentence": "She is articulate in interviews.",
+      "image_url": "https://source.unsplash.com/featured/?interview"
+    },
+    {
+      "word": "coherent",
+      "meaning_ta": "ஒழுங்காக இணைந்த",
+      "sentence": "His argument was coherent.",
+      "image_url": "https://source.unsplash.com/featured/?discussion"
+    },
+    {
+      "word": "intricate",
+      "meaning_ta": "சிக்கலான",
+      "sentence": "The design was intricate.",
+      "image_url": "https://source.unsplash.com/featured/?pattern"
+    }
+  ],
+  "day7": [
+    {
+      "word": "notorious",
+      "meaning_ta": "கெட்ட பெயர் பெற்ற",
+      "sentence": "The area is notorious for traffic.",
+      "image_url": "https://source.unsplash.com/featured/?traffic"
+    },
+    {
+      "word": "ambiguous",
+      "meaning_ta": "பல அர்த்தம் கொண்ட",
+      "sentence": "The message was ambiguous.",
+      "image_url": "https://source.unsplash.com/featured/?question mark"
+    },
+    {
+      "word": "inevitable",
+      "meaning_ta": "தவிர்க்க முடியாத",
+      "sentence": "Change is inevitable.",
+      "image_url": "https://source.unsplash.com/featured/?time"
+    },
+    {
+      "word": "formidable",
+      "meaning_ta": "பயமுறுத்தும் அளவுக்கு வலுவான",
+      "sentence": "She is a formidable opponent.",
+      "image_url": "https://source.unsplash.com/featured/?strength"
+    },
+    {
+      "word": "substantial",
+      "meaning_ta": "முக்கியமான அளவிலான",
+      "sentence": "He made substantial progress.",
+      "image_url": "https://source.unsplash.com/featured/?growth"
+    }
+  ],
+  "day8": [
+    {
+      "word": "hypothetical",
+      "meaning_ta": "கற்பனை சார்ந்த",
+      "sentence": "Consider a hypothetical situation.",
+      "image_url": "https://source.unsplash.com/featured/?imagination"
+    },
+    {
+      "word": "astute",
+      "meaning_ta": "தீவிரமான அறிவுள்ள",
+      "sentence": "She made an astute observation.",
+      "image_url": "https://source.unsplash.com/featured/?thinking"
+    },
+    {
+      "word": "contemplate",
+      "meaning_ta": "ஆழமாக சிந்திக்க",
+      "sentence": "He contemplated his future.",
+      "image_url": "https://source.unsplash.com/featured/?thinking alone"
+    },
+    {
+      "word": "decisive",
+      "meaning_ta": "தெளிவான முடிவெடுக்கும்",
+      "sentence": "She took decisive action.",
+      "image_url": "https://source.unsplash.com/featured/?decision"
+    },
+    {
+      "word": "robust",
+      "meaning_ta": "வலுவான",
+      "sentence": "The system is robust.",
+      "image_url": "https://source.unsplash.com/featured/?strong structure"
+    }
+  ],
+  "day9": [
+    {
+      "word": "eloquence",
+      "meaning_ta": "பேச்சுத் திறமை",
+      "sentence": "His eloquence impressed everyone.",
+      "image_url": "https://source.unsplash.com/featured/?speech"
+    },
+    {
+      "word": "insightful",
+      "meaning_ta": "ஆழ்ந்த புரிதல் கொண்ட",
+      "sentence": "She gave insightful feedback.",
+      "image_url": "https://source.unsplash.com/featured/?insight"
+    },
+    {
+      "word": "methodical",
+      "meaning_ta": "ஒழுங்கான முறையில் செயல்படும்",
+      "sentence": "He is methodical in his work.",
+      "image_url": "https://source.unsplash.com/featured/?planning"
+    },
+    {
+      "word": "persistent",
+      "meaning_ta": "தொடர்ச்சியான முயற்சி கொண்ட",
+      "sentence": "She is persistent despite failures.",
+      "image_url": "https://source.unsplash.com/featured/?perseverance"
+    },
+    {
+      "word": "reliable",
+      "meaning_ta": "நம்பகமான",
+      "sentence": "He is a reliable employee.",
+      "image_url": "https://source.unsplash.com/featured/?trust"
+    }
+  ],
+  "day10": [
+    {
+      "word": "scrutinize",
+      "meaning_ta": "மிக கவனமாக பரிசோதிக்க",
+      "sentence": "The documents were scrutinized.",
+      "image_url": "https://source.unsplash.com/featured/?inspection"
+    },
+    {
+      "word": "tranquil",
+      "meaning_ta": "அமைதியான",
+      "sentence": "The village was tranquil.",
+      "image_url": "https://source.unsplash.com/featured/?quiet village"
+    },
+    {
+      "word": "vulnerable",
+      "meaning_ta": "எளிதில் பாதிக்கப்படும்",
+      "sentence": "Children are vulnerable.",
+      "image_url": "https://source.unsplash.com/featured/?child care"
+    },
+    {
+      "word": "assertive",
+      "meaning_ta": "தன்னம்பிக்கை கொண்ட",
+      "sentence": "She is assertive at work.",
+      "image_url": "https://source.unsplash.com/featured/?confidence"
+    },
+    {
+      "word": "innovative",
+      "meaning_ta": "புதுமையான",
+      "sentence": "The company is innovative.",
+      "image_url": "https://source.unsplash.com/featured/?innovation"
+    }
+  ],
+  "day11": [
+    {
+      "word": "cooperative",
+      "meaning_ta": "ஒத்துழைக்கும்",
+      "sentence": "The team was cooperative.",
+      "image_url": "https://source.unsplash.com/featured/?teamwork"
+    },
+    {
+      "word": "empathetic",
+      "meaning_ta": "பிறரின் உணர்வுகளை புரியும்",
+      "sentence": "She is empathetic.",
+      "image_url": "https://source.unsplash.com/featured/?empathy"
+    },
+    {
+      "word": "frugal",
+      "meaning_ta": "சிக்கனமான",
+      "sentence": "He lives a frugal life.",
+      "image_url": "https://source.unsplash.com/featured/?saving"
+    },
+    {
+      "word": "humble",
+      "meaning_ta": "தாழ்மையான",
+      "sentence": "Despite success, he is humble.",
+      "image_url": "https://source.unsplash.com/featured/?humility"
+    },
+    {
+      "word": "optimistic",
+      "meaning_ta": "நல்லதை எதிர்பார்க்கும்",
+      "sentence": "She is optimistic about life.",
+      "image_url": "https://source.unsplash.com/featured/?hope"
+    }
+  ],
+  "day12": [
+    {
+      "word": "prudent",
+      "meaning_ta": "விவேகமான",
+      "sentence": "He made a prudent choice.",
+      "image_url": "https://source.unsplash.com/featured/?wisdom"
+    },
+    {
+      "word": "resourceful",
+      "meaning_ta": "சமயோசிதமான",
+      "sentence": "She is resourceful.",
+      "image_url": "https://source.unsplash.com/featured/?creativity"
+    },
+    {
+      "word": "sincere",
+      "meaning_ta": "உண்மையான",
+      "sentence": "He gave a sincere apology.",
+      "image_url": "https://source.unsplash.com/featured/?apology"
+    },
+    {
+      "word": "tolerant",
+      "meaning_ta": "பொறுமை கொண்ட",
+      "sentence": "We should be tolerant.",
+      "image_url": "https://source.unsplash.com/featured/?peace"
+    },
+    {
+      "word": "vigilant",
+      "meaning_ta": "எச்சரிக்கையுடன் இருப்பவர்",
+      "sentence": "Security was vigilant.",
+      "image_url": "https://source.unsplash.com/featured/?security"
+    }
+  ],
+  "day13": [
+    {
+      "word": "adaptable",
+      "meaning_ta": "மாற்றங்களுக்கு ஏற்ப மாறக்கூடிய",
+      "sentence": "She is adaptable.",
+      "image_url": "https://source.unsplash.com/featured/?adaptation"
+    },
+    {
+      "word": "charismatic",
+      "meaning_ta": "கவர்ச்சியான",
+      "sentence": "He is a charismatic leader.",
+      "image_url": "https://source.unsplash.com/featured/?leader"
+    },
+    {
+      "word": "disciplined",
+      "meaning_ta": "கட்டுப்பாடு கொண்ட",
+      "sentence": "He is disciplined.",
+      "image_url": "https://source.unsplash.com/featured/?discipline"
+    },
+    {
+      "word": "ethical",
+      "meaning_ta": "நெறிமுறை சார்ந்த",
+      "sentence": "She follows ethical practices.",
+      "image_url": "https://source.unsplash.com/featured/?ethics"
+    },
+    {
+      "word": "logical",
+      "meaning_ta": "தர்க்கரீதியான",
+      "sentence": "His explanation was logical.",
+      "image_url": "https://source.unsplash.com/featured/?logic"
+    }
+  ],
+  "day14": [
+    {
+      "word": "neutral",
+      "meaning_ta": "நடுநிலையான",
+      "sentence": "The judge remained neutral.",
+      "image_url": "https://source.unsplash.com/featured/?balance"
+    },
+    {
+      "word": "observant",
+      "meaning_ta": "கவனமான",
+      "sentence": "She is observant.",
+      "image_url": "https://source.unsplash.com/featured/?observe"
+    },
+    {
+      "word": "proactive",
+      "meaning_ta": "முன்னெச்சரிக்கையுடன் செயல்படும்",
+      "sentence": "He is proactive.",
+      "image_url": "https://source.unsplash.com/featured/?initiative"
+    },
+    {
+      "word": "receptive",
+      "meaning_ta": "ஏற்றுக்கொள்ளும் மனப்பான்மை கொண்ட",
+      "sentence": "She is receptive to ideas.",
+      "image_url": "https://source.unsplash.com/featured/?listening"
+    },
+    {
+      "word": "strategic",
+      "meaning_ta": "திட்டமிடப்பட்ட",
+      "sentence": "They made a strategic move.",
+      "image_url": "https://source.unsplash.com/featured/?strategy"
+    }
+  ],
+  "day15": [
+    {
+      "word": "balanced",
+      "meaning_ta": "சமநிலை கொண்ட",
+      "sentence": "She has a balanced mindset.",
+      "image_url": "https://source.unsplash.com/featured/?balance stones"
+    },
+    {
+      "word": "competent",
+      "meaning_ta": "திறமை கொண்ட",
+      "sentence": "He is a competent engineer.",
+      "image_url": "https://source.unsplash.com/featured/?engineer"
+    },
+    {
+      "word": "consistent",
+      "meaning_ta": "நிலையான",
+      "sentence": "She is consistent.",
+      "image_url": "https://source.unsplash.com/featured/?consistency"
+    },
+    {
+      "word": "decisiveness",
+      "meaning_ta": "தீர்மானத் திறன்",
+      "sentence": "Decisiveness is important.",
+      "image_url": "https://source.unsplash.com/featured/?decision making"
+    },
+    {
+      "word": "efficient",
+      "meaning_ta": "திறம்பட செயல்படும்",
+      "sentence": "The system is efficient.",
+      "image_url": "https://source.unsplash.com/featured/?efficiency"
+    }
+  ],
+  "day16": [
+    {
+      "word": "focused",
+      "meaning_ta": "கவனம் செலுத்தும்",
+      "sentence": "Stay focused.",
+      "image_url": "https://source.unsplash.com/featured/?focus"
+    },
+    {
+      "word": "genuine",
+      "meaning_ta": "உண்மையான",
+      "sentence": "Her smile was genuine.",
+      "image_url": "https://source.unsplash.com/featured/?smile"
+    },
+    {
+      "word": "impartial",
+      "meaning_ta": "பாரபட்சமற்ற",
+      "sentence": "The decision was impartial.",
+      "image_url": "https://source.unsplash.com/featured/?justice"
+    },
+    {
+      "word": "motivated",
+      "meaning_ta": "உற்சாகம் கொண்ட",
+      "sentence": "He feels motivated.",
+      "image_url": "https://source.unsplash.com/featured/?motivation"
+    },
+    {
+      "word": "reliable",
+      "meaning_ta": "நம்பகமான",
+      "sentence": "She is reliable.",
+      "image_url": "https://source.unsplash.com/featured/?trustworthy"
+    }
+  ],
+  "day17": [
+    {
+      "word": "supportive",
+      "meaning_ta": "ஆதரவு தரும்",
+      "sentence": "She is supportive.",
+      "image_url": "https://source.unsplash.com/featured/?support"
+    },
+    {
+      "word": "thoughtful",
+      "meaning_ta": "ஆழமாக சிந்திக்கும்",
+      "sentence": "That was thoughtful of you.",
+      "image_url": "https://source.unsplash.com/featured/?thought"
+    },
+    {
+      "word": "transparent",
+      "meaning_ta": "தெளிவான",
+      "sentence": "The process is transparent.",
+      "image_url": "https://source.unsplash.com/featured/?clarity"
+    },
+    {
+      "word": "trustworthy",
+      "meaning_ta": "நம்பிக்கைக்குரிய",
+      "sentence": "He is trustworthy.",
+      "image_url": "https://source.unsplash.com/featured/?trust"
+    },
+    {
+      "word": "wise",
+      "meaning_ta": "ஞானமான",
+      "sentence": "She gave wise advice.",
+      "image_url": "https://source.unsplash.com/featured/?wisdom"
+    }
+  ],
+  "day18": [
+    {
+      "word": "attentive",
+      "meaning_ta": "கவனமுடன் இருப்பவர்",
+      "sentence": "He is attentive.",
+      "image_url": "https://source.unsplash.com/featured/?attention"
+    },
+    {
+      "word": "calm",
+      "meaning_ta": "அமைதியான",
+      "sentence": "Remain calm.",
+      "image_url": "https://source.unsplash.com/featured/?calm"
+    },
+    {
+      "word": "dedicated",
+      "meaning_ta": "அர்ப்பணிப்பு கொண்ட",
+      "sentence": "She is dedicated.",
+      "image_url": "https://source.unsplash.com/featured/?dedication"
+    },
+    {
+      "word": "enthusiastic",
+      "meaning_ta": "ஆர்வமுள்ள",
+      "sentence": "The students were enthusiastic.",
+      "image_url": "https://source.unsplash.com/featured/?enthusiasm"
+    },
+    {
+      "word": "flexible",
+      "meaning_ta": "நெகிழ்வான",
+      "sentence": "Be flexible.",
+      "image_url": "https://source.unsplash.com/featured/?flexibility"
+    }
+  ],
+  "day19": [
+    {
+      "word": "grateful",
+      "meaning_ta": "நன்றியுள்ள",
+      "sentence": "She felt grateful.",
+      "image_url": "https://source.unsplash.com/featured/?gratitude"
+    },
+    {
+      "word": "patient",
+      "meaning_ta": "பொறுமை கொண்ட",
+      "sentence": "Be patient.",
+      "image_url": "https://source.unsplash.com/featured/?patience"
+    },
+    {
+      "word": "respectful",
+      "meaning_ta": "மரியாதை செலுத்தும்",
+      "sentence": "He is respectful.",
+      "image_url": "https://source.unsplash.com/featured/?respect"
+    },
+    {
+      "word": "responsible",
+      "meaning_ta": "பொறுப்புள்ள",
+      "sentence": "She is responsible.",
+      "image_url": "https://source.unsplash.com/featured/?responsibility"
+    },
+    {
+      "word": "selfless",
+      "meaning_ta": "சுயநலமற்ற",
+      "sentence": "He made a selfless act.",
+      "image_url": "https://source.unsplash.com/featured/?helping"
+    }
+  ],
+  "day20": [
+    {
+      "word": "tactful",
+      "meaning_ta": "நயமான முறையில் நடக்கும்",
+      "sentence": "She handled it tactfully.",
+      "image_url": "https://source.unsplash.com/featured/?diplomacy"
+    },
+    {
+      "word": "upright",
+      "meaning_ta": "நேர்மையான",
+      "sentence": "He is upright.",
+      "image_url": "https://source.unsplash.com/featured/?integrity"
+    },
+    {
+      "word": "valiant",
+      "meaning_ta": "துணிச்சலான",
+      "sentence": "The valiant soldier fought bravely.",
+      "image_url": "https://source.unsplash.com/featured/?bravery"
+    },
+    {
+      "word": "warmhearted",
+      "meaning_ta": "அன்புள்ள மனம் கொண்ட",
+      "sentence": "She is warmhearted.",
+      "image_url": "https://source.unsplash.com/featured/?kind heart"
+    },
+    {
+      "word": "zeal",
+      "meaning_ta": "ஆர்வம்",
+      "sentence": "He worked with great zeal.",
+      "image_url": "https://source.unsplash.com/featured/?energy"
+    }
+  ]
+}

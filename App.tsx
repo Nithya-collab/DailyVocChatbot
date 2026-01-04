@@ -4,19 +4,21 @@ import { Platform, UserProfile, VocabWord, ChatMessage, ScheduleIntent } from '.
 import { generateDailyWords, parseReminderIntent } from './services/geminiService';
 import { PlatformIcon } from './components/PlatformIcon';
 import { WordDisplay } from './components/WordDisplay';
-import { initDB, saveProfile, getProfile } from './services/db';
-import { 
-  Settings, 
-  Send as SendIcon, 
-  RefreshCw, 
-  Calendar, 
-  User, 
-  CheckCircle2, 
+import { Login } from './components/Login';
+import { initDB, saveProfile, getProfile, clearProfile } from './services/db';
+import {
+  Settings,
+  Send as SendIcon,
+  RefreshCw,
+  Calendar,
+  User,
+  CheckCircle2,
   AlertCircle,
   Clock,
   LayoutDashboard,
   MessageSquare,
-  Bell
+  Bell,
+  LogOut
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -27,7 +29,7 @@ const App: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
-  
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
 
@@ -46,17 +48,6 @@ const App: React.FC = () => {
         const saved = await getProfile();
         if (saved) {
           setUser(saved);
-        } else {
-          const newUser: UserProfile = {
-            id: 'u1',
-            name: 'Learner',
-            platform: Platform.WhatsApp,
-            reminderTime: '10:00',
-            currentWords: [],
-            lastGenerated: ''
-          };
-          await saveProfile(newUser);
-          setUser(newUser);
         }
       } catch (err) {
         console.error("Failed to load user profile from DB", err);
@@ -73,6 +64,18 @@ const App: React.FC = () => {
       setUser(u);
     } catch (err) {
       console.error("Failed to save user profile", err);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await clearProfile();
+      setUser(null);
+      // Reset state if needed
+      setChatMessages([]);
+      setActiveTab('dashboard');
+    } catch (err) {
+      console.error("Failed to logout", err);
     }
   };
 
@@ -101,7 +104,7 @@ const App: React.FC = () => {
         lastGenerated: new Date().toISOString()
       };
       await handleSaveUser(updatedUser);
-      
+
       addBotMessage(`Good morning, ${user.name}! Here are your 5 visual vocabulary words for today.`);
     } catch (error) {
       console.error(error);
@@ -117,7 +120,7 @@ const App: React.FC = () => {
       // Here we simulate it by adding a message to the chat.
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      
+
       getProfile().then(currentUser => {
         if (currentUser && currentUser.currentWords.length > 0) {
           const wordsList = currentUser.currentWords.map((w: VocabWord) => w.word.toUpperCase()).join(', ');
@@ -130,7 +133,7 @@ const App: React.FC = () => {
       // Remove this timeout from tracking
       timeoutsRef.current = timeoutsRef.current.filter(id => id !== timeoutId);
     }, delayMs);
-    
+
     timeoutsRef.current.push(timeoutId);
   }, [addBotMessage]);
 
@@ -150,7 +153,7 @@ const App: React.FC = () => {
 
     try {
       const intent = await parseReminderIntent(currentInput);
-      
+
       if (intent.action === 'remind') {
         let delayMs = 0;
         let responseText = '';
@@ -163,15 +166,15 @@ const App: React.FC = () => {
           const now = new Date();
           const target = new Date();
           target.setHours(hours, minutes, 0, 0);
-          
+
           if (target <= now) {
             target.setDate(target.getDate() + 1);
           }
-          
+
           delayMs = target.getTime() - now.getTime();
           responseText = `Perfect. I'll resend today's vocabulary at ${intent.absoluteTime}.`;
         }
-        
+
         if (delayMs > 0) {
           setTimeout(() => {
             addBotMessage(responseText);
@@ -210,7 +213,7 @@ const App: React.FC = () => {
     </div>
   );
 
-  if (!user) return null;
+  if (!user) return <Login onLogin={setUser} />;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col max-w-4xl mx-auto border-x border-gray-200 shadow-xl">
@@ -226,7 +229,7 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={fetchNewWords}
             disabled={isRefreshing}
             className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all disabled:opacity-50"
@@ -286,7 +289,7 @@ const App: React.FC = () => {
                   {user.lastGenerated ? new Date(user.lastGenerated).toLocaleDateString() : 'No data'}
                 </span>
               </div>
-              
+
               {isRefreshing ? (
                 <div className="flex flex-col items-center justify-center py-20 space-y-4">
                   <div className="relative">
@@ -307,7 +310,7 @@ const App: React.FC = () => {
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">No Words Yet</h3>
                   <p className="text-gray-500 mb-8 max-w-xs mx-auto">Start your learning journey by generating your daily visual vocabulary batch.</p>
-                  <button 
+                  <button
                     onClick={fetchNewWords}
                     className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 hover:scale-105 active:scale-95"
                   >
@@ -341,7 +344,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Chat Messages */}
-            <div 
+            <div
               ref={scrollRef}
               className="flex-1 overflow-y-auto p-6 space-y-5 bg-gray-50/20"
             >
@@ -349,17 +352,16 @@ const App: React.FC = () => {
                 <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
                   <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
                     <Clock size={32} className="mx-auto mb-2 opacity-20" />
-                    <p className="text-sm italic">"Remind me in 1 minute"<br/>"Remind me at 8 PM"</p>
+                    <p className="text-sm italic">"Remind me in 1 minute"<br />"Remind me at 8 PM"</p>
                   </div>
                 </div>
               )}
               {chatMessages.map(msg => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
-                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                    msg.sender === 'user' 
-                    ? 'bg-blue-600 text-white rounded-tr-none' 
+                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.sender === 'user'
+                    ? 'bg-blue-600 text-white rounded-tr-none'
                     : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'
-                  }`}>
+                    }`}>
                     {msg.text}
                     <div className={`text-[10px] mt-2 font-medium opacity-60 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -372,15 +374,15 @@ const App: React.FC = () => {
             {/* Chat Input */}
             <div className="p-4 border-t border-gray-100 bg-white">
               <div className="flex gap-2">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Set a reminder... (e.g. 'remind me in 1 min')"
                   className="flex-1 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3.5 text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none text-gray-800"
                 />
-                <button 
+                <button
                   onClick={handleSendMessage}
                   className="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-100 active:scale-90 transition-all shrink-0"
                 >
@@ -397,7 +399,7 @@ const App: React.FC = () => {
         {activeTab === 'settings' && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
             <h2 className="text-2xl font-bold text-gray-800">Profile & Settings</h2>
-            
+
             <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="p-8 border-b border-gray-100 bg-gray-50/30">
                 <div className="flex items-center gap-6">
@@ -406,10 +408,10 @@ const App: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Display Name</label>
-                    <input 
-                      type="text" 
-                      value={user.name} 
-                      onChange={(e) => handleSaveUser({...user, name: e.target.value})}
+                    <input
+                      type="text"
+                      value={user.name}
+                      onChange={(e) => handleSaveUser({ ...user, name: e.target.value })}
                       className="text-2xl font-bold text-gray-900 border-b border-transparent focus:border-blue-300 bg-transparent focus:ring-0 p-0 w-full transition-all"
                     />
                   </div>
@@ -423,12 +425,11 @@ const App: React.FC = () => {
                     {Object.values(Platform).map((p) => (
                       <button
                         key={p}
-                        onClick={() => handleSaveUser({...user, platform: p})}
-                        className={`flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border-2 transition-all ${
-                          user.platform === p 
-                          ? 'bg-blue-50 border-blue-500 shadow-md scale-105' 
+                        onClick={() => handleSaveUser({ ...user, platform: p })}
+                        className={`flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border-2 transition-all ${user.platform === p
+                          ? 'bg-blue-50 border-blue-500 shadow-md scale-105'
                           : 'bg-white border-gray-100 hover:border-gray-200'
-                        }`}
+                          }`}
                       >
                         <PlatformIcon platform={p} size={28} />
                         <span className="text-xs font-bold text-gray-700">{p}</span>
@@ -441,10 +442,10 @@ const App: React.FC = () => {
                   <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">Daily Reminder Time</label>
                   <div className="relative group">
                     <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={20} />
-                    <input 
-                      type="time" 
+                    <input
+                      type="time"
                       value={user.reminderTime}
-                      onChange={(e) => handleSaveUser({...user, reminderTime: e.target.value})}
+                      onChange={(e) => handleSaveUser({ ...user, reminderTime: e.target.value })}
                       className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-12 pr-4 py-4 font-bold text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm"
                     />
                   </div>
@@ -464,20 +465,29 @@ const App: React.FC = () => {
                 </p>
               </div>
             </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="w-full bg-white border border-red-100 text-red-600 font-bold py-4 rounded-3xl hover:bg-red-50 hover:border-red-200 active:scale-95 transition-all flex items-center justify-center gap-3 shadow-sm"
+            >
+              <LogOut size={20} />
+              Sign Out
+            </button>
           </div>
         )}
       </main>
 
       {/* Navigation Bar */}
       <nav className="bg-white border-t border-gray-100 px-6 py-3 sticky bottom-0 z-10 flex justify-between items-center shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.05)]">
-        <button 
+        <button
           onClick={() => setActiveTab('dashboard')}
           className={`flex flex-col items-center gap-1.5 px-4 py-1 rounded-2xl transition-all ${activeTab === 'dashboard' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
         >
           <LayoutDashboard size={24} className={activeTab === 'dashboard' ? 'scale-110' : ''} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Dash</span>
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('chat')}
           className={`relative flex flex-col items-center gap-1.5 px-4 py-1 rounded-2xl transition-all ${activeTab === 'chat' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
         >
@@ -487,7 +497,7 @@ const App: React.FC = () => {
           <MessageSquare size={24} className={activeTab === 'chat' ? 'scale-110' : ''} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Chat</span>
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('settings')}
           className={`flex flex-col items-center gap-1.5 px-4 py-1 rounded-2xl transition-all ${activeTab === 'settings' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
         >

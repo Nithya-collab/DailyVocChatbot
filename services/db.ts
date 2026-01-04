@@ -45,3 +45,19 @@ export const getProfile = async (): Promise<any> => {
     request.onerror = () => reject(request.error);
   });
 };
+
+export const clearProfile = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const deleteRequest = store.delete(KEY);
+      deleteRequest.onsuccess = () => resolve();
+      deleteRequest.onerror = () => reject(deleteRequest.error);
+    };
+    request.onerror = () => reject(request.error);
+  });
+};
+
