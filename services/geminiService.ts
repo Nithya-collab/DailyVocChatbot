@@ -4,10 +4,19 @@ import { VocabWord, ScheduleIntent } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
+const themes = [
+  "Nature and Environment", "Technology and Innovation", "Human Emotions",
+  "Business and Leadership", "Art and Literature", "Science and Space",
+  "Philosophy and Thinking", "Travel and Culture", "Food and Culinary Arts",
+  "History and Ancient Times", "Architecture and Design", "Music and Performance"
+];
+
 export const generateDailyWords = async (): Promise<VocabWord[]> => {
+  const theme = themes[Math.floor(Math.random() * themes.length)];
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: "Generate 5 interesting, advanced English vocabulary words. Provide word, definition, pronunciation (phonetic), and one example sentence for each.",
+    contents: `Generate 5 interesting, advanced English vocabulary words related to the theme "${theme}". Provide word, definition, pronunciation (phonetic), one example sentence, and Tamil meaning for each. Ensure these are unique and not just the most common words.`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -18,16 +27,17 @@ export const generateDailyWords = async (): Promise<VocabWord[]> => {
             word: { type: Type.STRING },
             definition: { type: Type.STRING },
             pronunciation: { type: Type.STRING },
-            example: { type: Type.STRING }
+            example: { type: Type.STRING },
+            tamilMeaning: { type: Type.STRING }
           },
-          required: ["word", "definition", "pronunciation", "example"]
+          required: ["word", "definition", "pronunciation", "example", "tamilMeaning"]
         }
       }
     }
   });
 
   const wordsData = JSON.parse(response.text || '[]');
-  
+
   // Generate images for each word
   const wordsWithImages = await Promise.all(wordsData.map(async (item: any) => {
     const imageUrl = await generateWordImage(item.word, item.definition);
@@ -39,6 +49,38 @@ export const generateDailyWords = async (): Promise<VocabWord[]> => {
   }));
 
   return wordsWithImages;
+};
+
+export const generateWordOfTheDay = async (): Promise<VocabWord> => {
+  const theme = themes[Math.floor(Math.random() * themes.length)];
+
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: `Generate 1 interesting, advanced English vocabulary word related to the theme "${theme}". Provide word, definition, pronunciation (phonetic), one example sentence, and Tamil meaning.`,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          word: { type: Type.STRING },
+          definition: { type: Type.STRING },
+          pronunciation: { type: Type.STRING },
+          example: { type: Type.STRING },
+          tamilMeaning: { type: Type.STRING }
+        },
+        required: ["word", "definition", "pronunciation", "example", "tamilMeaning"]
+      }
+    }
+  });
+
+  const wordData = JSON.parse(response.text || '{}');
+  const imageUrl = await generateWordImage(wordData.word, wordData.definition);
+
+  return {
+    ...wordData,
+    id: new Date().toISOString().split('T')[0], // Use date as ID
+    imageUrl
+  };
 };
 
 const generateWordImage = async (word: string, definition: string): Promise<string> => {

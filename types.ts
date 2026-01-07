@@ -13,6 +13,7 @@ export interface VocabWord {
   example: string;
   imageUrl: string;
   pronunciation: string;
+  tamilMeaning?: string;
 }
 
 export interface UserProfile {

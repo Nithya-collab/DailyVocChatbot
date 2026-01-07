@@ -11,9 +11,9 @@ export const WordDisplay: React.FC<WordDisplayProps> = ({ word }) => {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col sm:flex-row transition-all hover:shadow-md">
       <div className="w-full sm:w-1/3 aspect-square sm:aspect-auto overflow-hidden bg-gray-100">
-        <img 
-          src={word.imageUrl} 
-          alt={word.word} 
+        <img
+          src={word.imageUrl}
+          alt={word.word}
           className="w-full h-full object-cover"
         />
       </div>
@@ -25,6 +25,9 @@ export const WordDisplay: React.FC<WordDisplayProps> = ({ word }) => {
           </button>
         </div>
         <p className="text-sm font-medium text-gray-500 italic mb-3">/ {word.pronunciation} /</p>
+        {word.tamilMeaning && (
+          <p className="text-lg text-blue-600 font-medium mb-3">Meaning: {word.tamilMeaning}</p>
+        )}
         <div className="space-y-4">
           <div>
             <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Definition</h4>

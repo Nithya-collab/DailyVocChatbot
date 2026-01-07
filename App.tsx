@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform, UserProfile, VocabWord, ChatMessage, ScheduleIntent } from './types';
 import { generateDailyWords, parseReminderIntent } from './services/geminiService';
+import { getTodaysWords, saveTodaysWords, subscribeEmail } from './services/firestoreService';
 import { PlatformIcon } from './components/PlatformIcon';
 import { WordDisplay } from './components/WordDisplay';
 import { Login } from './components/Login';
@@ -29,6 +30,8 @@ const App: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
+  const [subEmail, setSubEmail] = useState('');
+  const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
@@ -97,7 +100,18 @@ const App: React.FC = () => {
     setIsRefreshing(true);
     setLoading(true);
     try {
-      const words = await generateDailyWords();
+      // 1. Check if we already have today's words in Firestore
+      let words = await getTodaysWords();
+
+      if (!words || words.length === 0) {
+        // 2. If not, generate them via Gemini (Only one person needs to trigger this per day)
+        console.log("No words found for today, generating...");
+        words = await generateDailyWords();
+
+        // 3. Save them to Firestore
+        await saveTodaysWords(words);
+      }
+
       const updatedUser = {
         ...user,
         currentWords: words,
@@ -108,11 +122,40 @@ const App: React.FC = () => {
       addBotMessage(`Good morning, ${user.name}! Here are your 5 visual vocabulary words for today.`);
     } catch (error) {
       console.error(error);
+      addBotMessage("Sorry, I couldn't load the daily word. Please try again.");
     } finally {
       setLoading(false);
       setIsRefreshing(false);
     }
   }, [user, isRefreshing, addBotMessage]);
+
+  // Auto-fetch words when user is loaded and on Dashboard
+  useEffect(() => {
+    if (user && activeTab === 'dashboard') {
+      // Check if we need to fetch new words (e.g., if currentWords is empty or from a different day)
+      // Logic inside fetchNewWords handles the DB check, so we can just call it.
+      // Optimally, we check if user.lastGenerated is NOT today.
+      const today = new Date().toISOString().split('T')[0];
+      const lastGenDate = user.lastGenerated ? user.lastGenerated.split('T')[0] : '';
+
+      if (lastGenDate !== today || user.currentWords.length === 0) {
+        fetchNewWords();
+      }
+    }
+  }, [user, activeTab, fetchNewWords]);
+
+  const handleSubscribe = async () => {
+    if (!subEmail || !subEmail.includes('@')) return;
+    setSubStatus('loading');
+    const success = await subscribeEmail(subEmail);
+    if (success) {
+      setSubStatus('success');
+      setSubEmail('');
+      setTimeout(() => setSubStatus('idle'), 3000);
+    } else {
+      setSubStatus('error');
+    }
+  };
 
   const scheduleReminder = useCallback((delayMs: number) => {
     const timeoutId = window.setTimeout(() => {
@@ -247,13 +290,46 @@ const App: React.FC = () => {
       <main className="flex-1 p-6 overflow-y-auto">
         {activeTab === 'dashboard' && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            {/* Subscription Section */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-6 rounded-3xl text-white shadow-lg shadow-blue-200">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
+                  <Bell size={32} className="text-white" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-xl font-bold mb-1">Get Daily Words by Email</h3>
+                  <p className="text-blue-100 text-sm">Join the study group! We'll send the daily visual word straight to your inbox every morning.</p>
+                </div>
+                <div className="flex flex-col gap-2 w-full md:w-auto">
+                  <div className="flex bg-white/10 p-1 rounded-2xl border border-white/20">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={subEmail}
+                      onChange={(e) => setSubEmail(e.target.value)}
+                      className="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-blue-200 px-4 w-full md:w-48 outline-none"
+                    />
+                    <button
+                      onClick={handleSubscribe}
+                      disabled={subStatus === 'loading' || subStatus === 'success'}
+                      className="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-50 transition-colors disabled:opacity-50"
+                    >
+                      {subStatus === 'loading' ? 'Values...' : subStatus === 'success' ? 'Joined!' : 'Subscribe'}
+                    </button>
+                  </div>
+                  {subStatus === 'error' && <p className="text-xs text-red-200 text-center">Something went wrong. Try again.</p>}
+                  {subStatus === 'success' && <p className="text-xs text-green-200 text-center">Successfully subscribed!</p>}
+                </div>
+              </div>
+            </div>
+
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
                 <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
                   <Calendar size={24} />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm text-gray-500">Daily Goal</p>
                   <p className="font-bold text-lg">5 Words</p>
                 </div>
@@ -262,7 +338,7 @@ const App: React.FC = () => {
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                   <Clock size={24} />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm text-gray-500">Sync Time</p>
                   <p className="font-bold text-lg">{user.reminderTime}</p>
                 </div>
@@ -271,7 +347,7 @@ const App: React.FC = () => {
                 <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
                   <Bell size={24} />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm text-gray-500">Active Reminders</p>
                   <p className="font-bold text-lg">{timeoutsRef.current.length} Pending</p>
                 </div>
@@ -295,7 +371,6 @@ const App: React.FC = () => {
                   <div className="relative">
                     <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
                   </div>
-                  <p className="text-gray-500 font-medium">Brewing visual magic...</p>
                 </div>
               ) : user.currentWords.length > 0 ? (
                 <div className="grid grid-cols-1 gap-6">
@@ -308,14 +383,8 @@ const App: React.FC = () => {
                   <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
                     <AlertCircle size={40} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">No Words Yet</h3>
-                  <p className="text-gray-500 mb-8 max-w-xs mx-auto">Start your learning journey by generating your daily visual vocabulary batch.</p>
-                  <button
-                    onClick={fetchNewWords}
-                    className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 hover:scale-105 active:scale-95"
-                  >
-                    Generate Words
-                  </button>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Loading Daily Words...</h3>
+                  <p className="text-gray-500 mb-8 max-w-xs mx-auto">Please wait while we fetch your daily vocabulary.</p>
                 </div>
               )}
             </section>
