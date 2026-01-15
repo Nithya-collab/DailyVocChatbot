@@ -12,12 +12,12 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const firebaseConfig = {
-    apiKey: process.env.VITE_FIREBASE_API_KEY,
-    authDomain: "vocab-users.firebaseapp.com",
-    projectId: "vocab-users",
-    storageBucket: "vocab-users.firebasestorage.app",
-    messagingSenderId: process.env.VITE_FIREBASE_SENDER_ID,
-    appId: process.env.VITE_FIREBASE_API_ID,
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: "vocab-users.firebaseapp.com",
+  projectId: "vocab-users",
+  storageBucket: "vocab-users.firebasestorage.app",
+  messagingSenderId: process.env.VITE_FIREBASE_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_API_ID,
 };
 
 // Initialize Firebase
@@ -26,87 +26,116 @@ const db = getFirestore(app);
 
 // Email Transporter
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // App Password
-    },
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS, // App Password
+  },
 });
 
 const getTodayDateString = () => {
-    return new Date().toISOString().split('T')[0];
+  return new Date().toISOString().split('T')[0];
 };
 
 async function sendDailyEmails() {
-    try {
-        console.log("🚀 Starting Daily Email Service...");
+  try {
+    console.log("🚀 Starting Daily Email Service...");
 
-        // 1. Fetch Today's Word
-        const today = getTodayDateString();
-        const wordRef = doc(db, "words", today);
-        const wordSnap = await getDoc(wordRef);
+    // 1. Fetch Today's Words
+    const today = getTodayDateString();
+    const wordRef = doc(db, "words", today);
+    const wordSnap = await getDoc(wordRef);
 
-        if (!wordSnap.exists()) {
-            console.log(`❌ No word found for date: ${today}. run the app to generate it!`);
-            return;
-        }
+    if (!wordSnap.exists()) {
+      console.log(`❌ No words found for date: ${today}. run the app to generate them!`);
+      return;
+    }
 
-        const wordData = wordSnap.data();
-        console.log(`✅ Found word: ${wordData.word}`);
+    const data = wordSnap.data();
+    // Support both new array format and old single word format for backward compatibility logic if needed
+    // But since we switched to array, we expect 'words' field
+    const wordsList = data.words || [data];
 
-        // 2. Fetch Subscribers
-        const subsSnap = await getDocs(collection(db, "subscribers"));
-        const emails = subsSnap.docs.map(doc => doc.data().email);
-        console.log(`📧 Sending to ${emails.length} subscribers...`);
+    if (!wordsList || wordsList.length === 0) {
+      console.log("❌ Words list is empty.");
+      return;
+    }
 
-        if (emails.length === 0) return;
+    console.log(`✅ Found ${wordsList.length} words.`);
 
-        // 3. Email Content (HTML)
-        const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <div style="background-color: #2563eb; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
-          <h1 style="color: white; margin: 0;">Daily Visual Vocab</h1>
+    // 2. Fetch Subscribers
+    const subsSnap = await getDocs(collection(db, "subscribers"));
+    const emails = subsSnap.docs.map(doc => doc.data().email);
+    console.log(`📧 Sending to ${emails.length} subscribers...`);
+
+    if (emails.length === 0) return;
+
+    // 3. Email Content (HTML) - Designed for 5 words
+    const todaysDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    let wordsHtml = '';
+
+    wordsList.forEach((word, index) => {
+      wordsHtml += `
+            <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="padding: 20px;">
+                    <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px;">
+                        <h2 style="color: #2563eb; font-size: 24px; margin: 0; text-transform: capitalize;">${index + 1}. ${word.word}</h2>
+                        <span style="color: #6b7280; font-style: italic; font-size: 16px;">/ ${word.pronunciation} /</span>
+                    </div>
+                    
+                    <p style="margin: 0 0 16px 0; color: #4b5563; line-height: 1.5;">${word.definition}</p>
+                    
+                    ${word.tamilMeaning ? `
+                    <div style="background-color: #eff6ff; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
+                        <span style="color: #1d4ed8; font-weight: bold; font-size: 14px;">Tamil:</span>
+                        <span style="color: #1e40af; font-size: 16px;">${word.tamilMeaning}</span>
+                    </div>` : ''}
+
+                    <div style="border-left: 3px solid #d1d5db; padding-left: 12px; margin-bottom: 16px;">
+                        <p style="margin: 0; color: #374151; font-style: italic;">"${word.example}"</p>
+                    </div>
+
+                    <img src="${word.imageUrl}" alt="${word.word}" style="width: 100%; height: auto; border-radius: 8px; display: block;">
+                </div>
+            </div>
+        `;
+    });
+
+    const htmlContent = `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; color: #333; background-color: #f9fafb; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #111827; margin: 0 0 5px 0; font-size: 28px;">Daily Visual Vocab</h1>
+          <p style="color: #6b7280; margin: 0; font-size: 14px;">${todaysDate}</p>
         </div>
-        <div style="border: 1px solid #e5e7eb; border-top: none; padding: 30px; border-radius: 0 0 10px 10px;">
-          <h2 style="color: #2563eb; font-size: 32px; text-transform: capitalize; margin-top: 0;">${wordData.word}</h2>
-          <p style="font-style: italic; color: #666; font-size: 18px;">/ ${wordData.pronunciation} /</p>
-          
-          <div style="background-color: #f3f4f6; padding: 15px; border-left: 5px solid #2563eb; margin: 20px 0;">
-            <p style="margin: 0; font-size: 16px;"><strong>Meaning:</strong> ${wordData.definition}</p>
-            ${wordData.tamilMeaning ? `<p style="margin: 10px 0 0 0; color: #000;"><strong>Tamil:</strong> ${wordData.tamilMeaning}</p>` : ''}
-          </div>
 
-          <p style="font-size: 16px;"><strong>Example:</strong> "${wordData.example}"</p>
+        ${wordsHtml}
 
-          <img src="${wordData.imageUrl}" alt="${wordData.word}" style="width: 100%; border-radius: 10px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          
-          <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #999;">
-            <p>Keep learning! See you tomorrow.</p>
-          </div>
+        <div style="text-align: center; margin-top: 40px; border-top: 1px solid #e5e7eb; padding-top: 20px; color: #9ca3af; font-size: 12px;">
+          <p>Keep learning! See you tomorrow.</p>
+          <p>Generated by NithiBot AI</p>
         </div>
       </div>
     `;
 
-        // 4. Send Emails
-        // Send individually or as BCC to avoid leaking emails. BCC is better for bulk.
-        // For "Personal" touch, individual is better, but takes longer. 
-        // Demo mode: BCC is fine or loop. Loop is safer for small lists to avoid spam filters flagging BCC.
+    // 4. Send Emails
+    const subject = `📘 ${wordsList.length} New Words for ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
 
-        for (const email of emails) {
-            await transporter.sendMail({
-                from: '"NithiBot" <' + process.env.EMAIL_USER + '>',
-                to: email,
-                subject: `📘 Today's Word: ${wordData.word.charAt(0).toUpperCase() + wordData.word.slice(1)}`,
-                html: htmlContent,
-            });
-            console.log(`   ➜ Sent to ${email}`);
-        }
-
-        console.log("🎉 All emails sent successfully!");
-
-    } catch (error) {
-        console.error("❌ Error running email service:", error);
+    for (const email of emails) {
+      await transporter.sendMail({
+        from: '"NithiBot" <' + process.env.EMAIL_USER + '>',
+        to: email,
+        subject: subject,
+        html: htmlContent,
+      });
+      console.log(`   ➜ Sent to ${email}`);
     }
+
+    console.log("🎉 All emails sent successfully!");
+
+  } catch (error) {
+    console.error("❌ Error running email service:", error);
+  }
 }
 
 sendDailyEmails();
