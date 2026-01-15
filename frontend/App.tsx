@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform, UserProfile, VocabWord, ChatMessage, ScheduleIntent } from './types';
-import { generateDailyWords, parseReminderIntent } from './services/geminiService';
-import { getTodaysWords, saveTodaysWords, subscribeEmail } from './services/firestoreService';
+import { generateDailyWords, parseReminderIntent } from '../backend/services/geminiService';
+import { getTodaysWords, saveTodaysWords, subscribeEmail } from '../backend/services/firestoreService';
 import { PlatformIcon } from './components/PlatformIcon';
 import { WordDisplay } from './components/WordDisplay';
 import { Login } from './components/Login';
-import { initDB, saveProfile, getProfile, clearProfile } from './services/db';
+import { initDB, saveProfile, getProfile, clearProfile } from '../backend/services/db';
 import {
   Settings,
   Send as SendIcon,

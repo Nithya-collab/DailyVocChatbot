@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
-import { auth, googleProvider, db, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '../services/firebase';
+import { auth, googleProvider, db, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '../../backend/services/firebase';
 import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
 import { UserProfile, Platform } from '../types';
 import { Mail, Lock, LogIn, AlertCircle, Eye, EyeOff, LayoutDashboard } from 'lucide-react';
-import { saveProfile, getProfile } from '../services/db';
+import { saveProfile, getProfile } from '../../backend/services/db';
 
 interface LoginProps {
     onLogin: (user: UserProfile) => void;

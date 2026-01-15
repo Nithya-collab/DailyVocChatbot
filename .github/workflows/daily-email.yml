@@ -32,4 +32,4 @@ jobs:
           VITE_FIREBASE_API_ID: ${{ secrets.VITE_FIREBASE_API_ID }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-        run: node server/sendDailyEmail.js
+        run: node backend/server/sendDailyEmail.js
